@@ -1,0 +1,7 @@
+name: Structures
+version: '1.0.0'
+main: net.bitbylogic.structures.Structures
+api-version: '1.21'
+authors: [ BitByLogic ]
+depend: [ PacketBlocks ]
+softdepend: [ PlaceholderAPI ]
