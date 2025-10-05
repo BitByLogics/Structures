@@ -40,7 +40,9 @@
 ## 📥 Installation
 
 1. Download the latest version from [Modrinth](https://modrinth.com/project/structures) or [GitHub](https://github.com/BitByLogics/Structures/releases).
-2. Place the `.jar` file in your server's `plugins/` folder.
+2. Download the latest version of [PacketEvents](https://modrinth.com/plugin/packetevents)
+3. Download the latest version of [PacketBlocks](https://modrinth.com/plugin/packetblocks)
+2. Place all three `.jar` files in your server's `plugins/` folder.
 3. Restart your server.
 
 ---
