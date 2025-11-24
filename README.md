@@ -171,7 +171,10 @@ MIT License — see [LICENSE](./LICENSE).
 
 ## 👤 Author
 
-Created by **BitByLogics**  
-Discord: `@BitByLogics`
+Created by **BitByLogics**
+
+Discord: `@BitByLogic`
+
+Shout out to [Sulaxan](https://github.com/Sulaxan) for developing the original system for my old server!
 
 ---
