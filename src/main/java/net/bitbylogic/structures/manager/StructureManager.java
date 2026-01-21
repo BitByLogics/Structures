@@ -69,7 +69,7 @@ public class StructureManager {
                 continue;
             }
 
-            Structure.getConfigParser().deserialize(structureSection).ifPresent(structure -> {
+            Structure.getSerializer().deserialize(structureSection).ifPresent(structure -> {
                 structures.put(structureId, structure);
                 structureViewers.put(structureId, new HashSet<>());
 
@@ -222,7 +222,7 @@ public class StructureManager {
         }
 
         if (!structure.getBlocks().isEmpty()) {
-            Structure.getConfigParser().serialize(plugin.getStructureConfig(), structure);
+            Structure.getSerializer().serialize(plugin.getStructureConfig(), structure);
             plugin.saveStructureConfig();
             return true;
         }

@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 @RequiredArgsConstructor
 public class Structure {
 
-    private static final StructureConfigSerializer CONFIG_PARSER = new StructureConfigSerializer();
+    private static final StructureConfigSerializer SERIALIZER = new StructureConfigSerializer();
 
     private final String id;
     private final Map<Location, BlockData> blocks;
@@ -53,8 +53,8 @@ public class Structure {
         this.requireTrigger = false;
     }
 
-    public static StructureConfigSerializer getConfigParser() {
-        return CONFIG_PARSER;
+    public static StructureConfigSerializer getSerializer() {
+        return SERIALIZER;
     }
 
 }
