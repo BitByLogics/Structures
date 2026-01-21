@@ -8,7 +8,6 @@ import net.bitbylogic.structures.manager.StructureManager;
 import net.bitbylogic.structures.structure.Structure;
 import net.bitbylogic.utils.Placeholder;
 import net.bitbylogic.utils.message.config.MessageProvider;
-import net.bitbylogic.utils.message.format.Formatter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -72,7 +71,7 @@ public class StructureEditorListener implements Listener {
             return;
         }
 
-        Location targetBlockLoc = event.getBlock().getLocation();
+        Location targetBlockLoc = event.getLocation();
 
         if(!structure.getBlocks().containsKey(targetBlockLoc)) {
             return;

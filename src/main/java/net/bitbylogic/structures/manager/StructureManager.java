@@ -69,7 +69,7 @@ public class StructureManager {
                 continue;
             }
 
-            Structure.getConfigParser().serializeFrom(structureSection).ifPresent(structure -> {
+            Structure.getConfigParser().deserialize(structureSection).ifPresent(structure -> {
                 structures.put(structureId, structure);
                 structureViewers.put(structureId, new HashSet<>());
 
@@ -155,7 +155,7 @@ public class StructureManager {
     public PacketBlock createPacketBlock(String structureId, Location location, BlockData data) {
         PacketBlock packetBlock = packetBlockManager.createBlock(location, data);
 
-        packetBlock.setBlockDataSupplierForAll(data);
+        packetBlock.setDataForAll(data);
         packetBlock.addMetadata(PACKET_BLOCK_METADATA_KEY, structureId);
         packetBlock.addMetadata(createStructureIdMetadataKey(structureId), true);
 
@@ -222,7 +222,7 @@ public class StructureManager {
         }
 
         if (!structure.getBlocks().isEmpty()) {
-            Structure.getConfigParser().serializeTo(plugin.getStructureConfig(), structure);
+            Structure.getConfigParser().serialize(plugin.getStructureConfig(), structure);
             plugin.saveStructureConfig();
             return true;
         }
@@ -296,8 +296,10 @@ public class StructureManager {
         packetBlockManager
                 .getBlocksByMetadata(createStructureIdMetadataKey(structureId))
                 .forEach(block -> {
-                    block.addViewer(player);
-                    states.add(block.getBlockState(player));
+                    PacketBlock packetBlock = (PacketBlock) block;
+
+                    packetBlock.addViewer(player);
+                    states.add(packetBlock.getBlockState(player));
                 });
 
         player.sendBlockChanges(states);

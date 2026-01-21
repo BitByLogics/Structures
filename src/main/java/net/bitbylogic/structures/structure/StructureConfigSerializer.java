@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 public class StructureConfigSerializer implements ConfigSerializer<Structure> {
 
     @Override
-    public Optional<Structure> serializeFrom(@NonNull ConfigurationSection section) {
+    public Optional<Structure> deserialize(@NonNull ConfigurationSection section) {
         String id = section.getName();
 
         Map<Location, BlockData> blocks = new HashMap<>();
@@ -54,7 +54,7 @@ public class StructureConfigSerializer implements ConfigSerializer<Structure> {
     }
 
     @Override
-    public ConfigurationSection serializeTo(@NonNull ConfigurationSection section, @NonNull Structure structure) {
+    public ConfigurationSection serialize(@NonNull ConfigurationSection section, @NonNull Structure structure) {
         ConfigurationSection structureSection = section.createSection(structure.getId());
 
         List<String> blocks = new ArrayList<>();
