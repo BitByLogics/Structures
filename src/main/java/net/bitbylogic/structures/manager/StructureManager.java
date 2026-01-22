@@ -3,8 +3,8 @@ package net.bitbylogic.structures.manager;
 import lombok.Getter;
 import lombok.NonNull;
 import net.bitbylogic.packetblocks.PacketBlocks;
-import net.bitbylogic.packetblocks.block.PacketBlock;
 import net.bitbylogic.packetblocks.block.PacketBlockManager;
+import net.bitbylogic.packetblocks.group.PacketBlockGroup;
 import net.bitbylogic.structures.Structures;
 import net.bitbylogic.structures.animation.StructureAnimation;
 import net.bitbylogic.structures.animation.StructureAnimationManager;
@@ -14,11 +14,8 @@ import net.bitbylogic.utils.context.BukkitContextKeys;
 import net.bitbylogic.utils.context.ContextBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -76,7 +73,7 @@ public class StructureManager {
                 loadShowTriggers(structure);
                 loadHideTriggers(structure);
 
-                structure.getBlocks().forEach((location, blockData) -> createPacketBlock(structure.getId(), location, blockData));
+                createGroup(structure);
 
                 plugin.getLogger().log(Level.INFO, String.format(
                         "Loaded structure %s (%d blocks)",
@@ -102,6 +99,13 @@ public class StructureManager {
 
     protected String createStructureIdMetadataKey(String structureId) {
         return PACKET_BLOCK_METADATA_KEY + "_" + structureId;
+    }
+
+    public void createGroup(@NonNull Structure structure) {
+        PacketBlockGroup group = PacketBlocks.getInstance().getBlockManager().createGroup(structure.getBlocks());
+
+        group.addMetadata(PACKET_BLOCK_METADATA_KEY, structure.getId());
+        group.addMetadata(createStructureIdMetadataKey(structure.getId()), true);
     }
 
     private void loadShowTriggers(Structure structure) {
@@ -142,42 +146,8 @@ public class StructureManager {
         });
     }
 
-    /**
-     * Creates a {@link PacketBlock} at the specified location with the given block data,
-     * associates it with the structure identified by the provided structure ID, and sets metadata.
-     *
-     * @param structureId The ID of the structure to associate with the packet block.
-     * @param location The location where the packet block will be created.
-     * @param data The block data for the packet block.
-     * @return The created {@link PacketBlock} instance.
-     */
-    @ApiStatus.Internal
-    public PacketBlock createPacketBlock(String structureId, Location location, BlockData data) {
-        PacketBlock packetBlock = packetBlockManager.createBlock(location, data);
-
-        packetBlock.setDataForAll(data);
-        packetBlock.addMetadata(PACKET_BLOCK_METADATA_KEY, structureId);
-        packetBlock.addMetadata(createStructureIdMetadataKey(structureId), true);
-
-        return packetBlock;
-    }
-
-    /**
-     * Retrieves packets blocks associated with the specified structure ID. These packet blocks
-     * are identified based on metadata linked to the structure. If the structure does not exist
-     * in the internal structure registry, an empty set is returned.
-     *
-     * @param structureId The unique identifier of the structure for which packet blocks need to be retrieved.
-     *                    Must not be null or empty.
-     * @return A set of {@link PacketBlock} instances associated with the structure ID. Returns an empty
-     *         set if the structure ID does not exist in the registry.
-     */
-    public Set<PacketBlock> getPacketBlocks(@NonNull String structureId) {
-        if (!structures.containsKey(structureId)) {
-            return new HashSet<>();
-        }
-
-        return Set.of(packetBlockManager.getBlocksByMetadata(createStructureIdMetadataKey(structureId)).toArray(new PacketBlock[]{}));
+    public Optional<PacketBlockGroup> getPacketBlockGroup(@NonNull String structureId) {
+        return packetBlockManager.getBlocksByMetadata(createStructureIdMetadataKey(structureId)).stream().findFirst().map(block -> (PacketBlockGroup) block);
     }
 
     /**
@@ -291,18 +261,15 @@ public class StructureManager {
 
         viewers.add(player.getUniqueId());
 
-        List<BlockState> states = new ArrayList<>();
-
         packetBlockManager
                 .getBlocksByMetadata(createStructureIdMetadataKey(structureId))
                 .forEach(block -> {
-                    PacketBlock packetBlock = (PacketBlock) block;
+                    if (!(block instanceof PacketBlockGroup group)) {
+                        return;
+                    }
 
-                    packetBlock.addViewer(player);
-                    states.add(packetBlock.getBlockState(player));
+                    group.addAndUpdateViewer(player);
                 });
-
-        player.sendBlockChanges(states);
 
         getStructure(structureId).ifPresent(structure -> {
             animationManager.getAnimation(structure.getAppearAnimationId()).ifPresent(structureAnimation -> {

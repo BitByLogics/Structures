@@ -1,13 +1,13 @@
 package net.bitbylogic.structures.listener;
 
 import lombok.NonNull;
-import net.bitbylogic.packetblocks.PacketBlocks;
-import net.bitbylogic.packetblocks.block.PacketBlockManager;
 import net.bitbylogic.packetblocks.event.PacketBlockBreakEvent;
+import net.bitbylogic.packetblocks.lib.bitsutils.location.WorldPosition;
 import net.bitbylogic.structures.manager.StructureManager;
 import net.bitbylogic.structures.structure.Structure;
 import net.bitbylogic.utils.Placeholder;
 import net.bitbylogic.utils.message.config.MessageProvider;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,16 +15,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.UUID;
+
 public class StructureEditorListener implements Listener {
 
     private final MessageProvider messageProvider;
     private final StructureManager structureManager;
-    private final PacketBlockManager packetBlockManager;
 
     public StructureEditorListener(@NonNull MessageProvider messageProvider, @NonNull StructureManager structureManager) {
         this.messageProvider = messageProvider;
         this.structureManager = structureManager;
-        this.packetBlockManager = PacketBlocks.getInstance().getBlockManager();
     }
 
     @EventHandler
@@ -85,7 +85,7 @@ public class StructureEditorListener implements Listener {
                 new Placeholder("%z%", targetBlockLoc.getBlockZ())
         ));
 
-        packetBlockManager.getBlock(targetBlockLoc).ifPresent(packetBlockManager::removeBlock);
+        structureManager.getPacketBlockGroup(id).ifPresent(group -> structureManager.getPacketBlockManager().removeBlockFromGroup(group, targetBlockLoc));
     }
 
     @EventHandler
@@ -117,7 +117,8 @@ public class StructureEditorListener implements Listener {
                 new Placeholder("%z%", targetBlockLoc.getBlockZ())
         ));
 
-        packetBlockManager.getBlock(targetBlockLoc).ifPresent(packetBlockManager::removeBlock);
+        structureManager.getPacketBlockGroup(id).ifPresent(group ->
+                structureManager.getPacketBlockManager().removeBlockFromGroup(group, targetBlockLoc));
     }
 
 }

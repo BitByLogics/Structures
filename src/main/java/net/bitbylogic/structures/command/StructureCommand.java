@@ -2,10 +2,11 @@ package net.bitbylogic.structures.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import co.aikar.commands.annotation.Optional;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import lombok.RequiredArgsConstructor;
 import net.bitbylogic.packetblocks.PacketBlocks;
-import net.bitbylogic.packetblocks.block.PacketBlock;
+import net.bitbylogic.packetblocks.lib.bitsutils.location.WorldPosition;
 import net.bitbylogic.packetblocks.util.PacketBlockUtil;
 import net.bitbylogic.structures.Structures;
 import net.bitbylogic.structures.animation.StructureAnimation;
@@ -26,10 +27,7 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 @CommandAlias("structure")
@@ -156,20 +154,19 @@ public class StructureCommand extends BaseCommand {
 
             viewers.add(player.getUniqueId());
 
-            structureManager.getEditorModeLocations().get(player.getUniqueId()).forEach(location -> {
+            Map<Location, BlockData> editedLocations = new HashMap<>();
+            structureManager.getEditorModeLocations().get(player.getUniqueId()).forEach(location -> editedLocations.put(location, location.getBlock().getBlockData().clone()));
+
+            editedLocations.keySet().forEach(location -> {
                 BlockData blockData = location.getBlock().getBlockData();
 
                 structure.getBlocks().put(location, blockData);
                 location.getBlock().setBlockData(AIR_BLOCK_DATA, false);
-
-                PacketBlock packetBlock = structureManager.createPacketBlock(
-                        structure.getId(),
-                        location,
-                        blockData);
-
-                packetBlock.addViewer(player);
-                packetBlock.sendUpdate(player);
             });
+
+            structureManager.getPacketBlockGroup(editingStructureId).ifPresentOrElse(group ->
+                    structureManager.getPacketBlockManager().addBlocksToGroup(group, editedLocations),
+                    () -> structureManager.createGroup(structure));
 
             boolean saved = structureManager.saveStructure(editingStructureId);
             structureManager.getEditorMode().remove(player.getUniqueId());
@@ -283,17 +280,9 @@ public class StructureCommand extends BaseCommand {
             blockData.rotate(RotationUtil.getOppositeRotation(player.getYaw()));
 
             newStructure.getBlocks().put(newLoc, blockData);
-
-            PacketBlock packetBlock = structureManager.createPacketBlock(
-                    newStructure.getId(),
-                    newLoc,
-                    blockData
-            );
-
-            packetBlock.addViewer(player);
-            packetBlock.sendUpdate(player);
         }
 
+        structureManager.createGroup(newStructure);
         structureManager.saveStructure(newId);
 
         player.sendMessage(messageProvider.getMessage("Copy.Successfully-Copied",
