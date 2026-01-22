@@ -6,7 +6,7 @@
 
     <groupId>net.bitbylogic</groupId>
     <artifactId>Structures</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>Structures</name>
@@ -131,7 +131,7 @@
         <dependency>
             <groupId>com.github.BitByLogics</groupId>
             <artifactId>PacketBlocks</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.3</version>
             <scope>provided</scope>
         </dependency>
 
