@@ -11,6 +11,7 @@ import net.bitbylogic.structures.manager.StructureManager;
 import net.bitbylogic.structures.placeholder.StructurePlaceholderExpansion;
 import net.bitbylogic.utils.message.config.MessageProvider;
 import net.bitbylogic.utils.message.format.Formatter;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +22,8 @@ import java.util.logging.Level;
 
 @Getter
 public final class Structures extends JavaPlugin {
+
+    private static final int METRICS_ID = 28974;
 
     private final File structureFile = new File(getDataFolder(), "structures.yml");
 
@@ -35,6 +38,8 @@ public final class Structures extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
+        new Metrics(this, METRICS_ID);
 
         Formatter.registerConfig(new File(getDataFolder(), "config.yml"));
 
