@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🏗️ Structures 
+# Structures 
 
-**Structures** is a flexible Minecraft plugin for creating and managing **custom structures** that can be **edited, copied, saved, and viewed** by players. It provides a robust interface for handling per-player structure displays, editing mechanics, and integrates with **PacketBlocks** for seamless client-side updates.
+Structures is a flexible Minecraft plugin for creating and managing custom structures that can be edited, copied, saved, and viewed by players. The structures are handled by [PacketBlocks](https://github.com/BitByLogics/PacketBlocks) which allows the structure to be shown/hidden to players individually, all client side.
 
 ![Issues](https://img.shields.io/github/issues-raw/BitByLogics/Structures)
 [![Stars](https://img.shields.io/github/stars/BitByLogics/Structures)](https://github.com/BitByLogics/Structures/stargazers)
@@ -15,29 +15,27 @@
 
 ---
 
-## 🔧 Features
+## Features
 
-- ✏️ **Edit structures** with per-player functionality
-- ❄️ **Client-side visibility** powered by PacketBlocks
-- 🏗️ Save and load structures directly to configuration
-- 📦 **Copy, delete, and save** structure commands
-- 📐 **Efficient structure management** with metadata-based blocks
-- 🖥️ Debugging info in logs for structure operations
-- 🌟 Animation and triggers for structure appear/hide events
+- Edit structures with per-player functionality
+- Client-side visibility powered by [PacketBlocks](https://github.com/BitByLogics/PacketBlocks)
+- Save and load structures directly to configuration
+- Copy, delete, and save structure commands
+- Animation and triggers for structure appear/hide events
 
 ---
 
-## ✅ Requirements
+## Requirements
 
-- **Minecraft 1.21+** ([Paper](https://papermc.io/) server or compatible forks)
-- **Java 21+**
-- **Dependencies:**
+- Minecraft 1.21+ ([Paper](https://papermc.io/) server or compatible forks)
+- Java 21+
+- Dependencies:
     - [PacketEvents](https://modrinth.com/plugin/packetevents) 2.9.5+
     - [PacketBlocks](https://modrinth.com/plugin/packetblocks)
 
 ---
 
-## 📥 Installation
+## Installation
 
 1. Download the latest version from [Modrinth](https://modrinth.com/project/structures) or [GitHub](https://github.com/BitByLogics/Structures/releases).
 2. Download the latest version of [PacketEvents](https://modrinth.com/plugin/packetevents)
@@ -47,7 +45,7 @@
 
 ---
 
-## ⚙️ Message Configuration
+## Message Configuration
 
 All plugin messages are configurable in the config.yml
 
@@ -120,7 +118,7 @@ Messages:
 
 ---
 
-## 📔 Commands
+## Commands
 
 | Command                                                | Description                             | Permission          |
 |--------------------------------------------------------|-----------------------------------------|---------------------|
@@ -135,17 +133,17 @@ Messages:
 
 ---
 
-## 🧩 How It Works
+## How It Works
 
-1. **Editing:** Players with the permission `structures.admin` can edit structures using `/structure edit <id>`.
-2. **Client-Side Updates:** Structures use PacketBlocks to ensure updates are only visible to specific players.
-3. **Saving/Loading:** Structures persist in the configuration file and can be reloaded across server restarts.
-4. **Copying:** Duplicate existing structures using the `/structure copy <id> <new id>` command.
-5. **Displaying Structures:** Structures are visible by default, but can be hidden using the `/structure view <id> <player>` command.
+1. Editing: Players with the permission `structures.admin` can edit structures using `/structure edit <id>`.
+2. Client-Side Updates: Structures use PacketBlocks to ensure updates are only visible to specific players.
+3. Saving/Loading: Structures persist in the configuration file and can be reloaded across server restarts.
+4. Copying: Duplicate existing structures using the `/structure copy <id> <new id>` command.
+5. Displaying Structures: Structures are visible by default, but can be hidden using the `/structure view <id> <player>` command.
 
 ---
 
-## ⬜ PlaceholderAPI Support
+## PlaceholderAPI Support
 
 If installed, the following PlaceholderAPI placeholders will be available:
 
@@ -153,28 +151,4 @@ If installed, the following PlaceholderAPI placeholders will be available:
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. Fork the repository.
-2. Make changes for new features/bug fixes.
-3. Create a pull request with a detailed description of your updates.
-
----
-
-## 📜 License
-
-MIT License — see [LICENSE](./LICENSE).
-
----
-
-## 👤 Author
-
-Created by **BitByLogics**
-
-Discord: `@BitByLogic`
-
-Shout out to [Sulaxan](https://github.com/Sulaxan) for developing the original system for my old server!
-
----
+<sup>Shout out to [Sulaxan](https://github.com/Sulaxan) for developing the inspiration for this system for my old server!<sup>
