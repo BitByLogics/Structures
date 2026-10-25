@@ -21,6 +21,12 @@ jobs:
           TAG: ${{ github.event.release.tag_name || inputs.tag }}
         run: gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern 'Structures-*.jar' --dir dist
 
+      - name: Fetch release notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json body --jq .body > CHANGELOG.md
+
       - name: Publish
         uses: Kir-Antipov/mc-publish@v3.3
         with:
@@ -31,7 +37,7 @@ jobs:
           name: Structures ${{ github.event.release.tag_name || inputs.tag }}
           version: ${{ github.event.release.tag_name || inputs.tag }}
           version-type: release
-          changelog: ${{ github.event.release.body }}
+          changelog-file: CHANGELOG.md
           loaders: |
             bukkit
             spigot
