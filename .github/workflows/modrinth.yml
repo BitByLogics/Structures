@@ -33,6 +33,8 @@ jobs:
           version-type: release
           changelog: ${{ github.event.release.body }}
           loaders: |
+            bukkit
+            spigot
             paper
             purpur
             folia
