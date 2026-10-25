@@ -142,13 +142,13 @@ public class StructureCommand extends BaseCommand {
                 return;
             }
 
-            Structure structure = structureManager.getStructures().get(structureId);
-            Set<UUID> viewers = structureManager.getStructureViewers().get(structureId);
+            Structure structure = structureManager.getStructures().get(editingStructureId);
+            Set<UUID> viewers = structureManager.getStructureViewers().get(editingStructureId);
 
             if (viewers == null) {
                 Bukkit.getLogger().log(
                         Level.SEVERE,
-                        "Viewers entry for structure " + structureId + " does not exist");
+                        "Viewers entry for structure " + editingStructureId + " does not exist");
                 return;
             }
 
@@ -255,7 +255,7 @@ public class StructureCommand extends BaseCommand {
         if (viewers == null) {
             Bukkit.getLogger().log(
                     Level.SEVERE,
-                    "Viewers entry for structure " + newStructure + " does not exist");
+                    "Viewers entry for structure " + newStructure.getId() + " does not exist");
             return;
         }
 

@@ -1,0 +1,45 @@
+name: Publish to Modrinth
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: temurin
+          cache: maven
+
+      - name: Build
+        run: mvn -B clean package
+
+      - name: Publish
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            target/Structures-*.jar
+            !target/original-*.jar
+          name: Structures ${{ github.event.release.tag_name || github.ref_name }}
+          version: ${{ github.event.release.tag_name || github.ref_name }}
+          version-type: release
+          changelog: ${{ github.event.release.body }}
+          loaders: |
+            paper
+            purpur
+            folia
+          game-versions: |
+            >=1.21
+          java: 21

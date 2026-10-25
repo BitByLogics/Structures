@@ -5,3 +5,4 @@ api-version: '1.21'
 authors: [ BitByLogic ]
 depend: [ PacketBlocks ]
 softdepend: [ PlaceholderAPI ]
+folia-supported: true

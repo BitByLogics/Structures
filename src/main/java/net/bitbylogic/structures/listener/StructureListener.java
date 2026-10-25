@@ -6,11 +6,11 @@ import net.bitbylogic.packetblocks.block.PacketBlockManager;
 import net.bitbylogic.structures.Structures;
 import net.bitbylogic.structures.manager.StructureManager;
 import net.bitbylogic.structures.structure.Structure;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class StructureListener implements Listener {
 
@@ -28,7 +28,7 @@ public class StructureListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        player.getScheduler().runDelayed(plugin, task -> {
             for (Structure structure : structureManager.getStructures().values()) {
                 if(structure.isRequireTrigger()) {
                     continue;
@@ -40,11 +40,11 @@ public class StructureListener implements Listener {
 
                 structureManager.addViewer(structure.getId(), player);
             }
-        }, 5);
+        }, null, 5);
     }
 
     @EventHandler
-    public void onQuit(PlayerJoinEvent event) {
+    public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
         structureManager.getStructureViewers().forEach((key, value) -> value.remove(player.getUniqueId()));

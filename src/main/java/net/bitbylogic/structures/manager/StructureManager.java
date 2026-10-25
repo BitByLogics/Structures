@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 @Getter
@@ -26,8 +27,8 @@ public class StructureManager {
 
     public static final String PACKET_BLOCK_METADATA_KEY = "structure";
 
-    private final Map<String, Structure> structures = new HashMap<>();
-    private final Map<String, Set<UUID>> structureViewers = new HashMap<>();
+    private final Map<String, Structure> structures = new ConcurrentHashMap<>();
+    private final Map<String, Set<UUID>> structureViewers = new ConcurrentHashMap<>();
 
     private final Map<UUID, String> editorMode = new HashMap<>();
     private final Map<UUID, List<Location>> editorModeLocations = new HashMap<>();
@@ -57,7 +58,7 @@ public class StructureManager {
         structures.clear();
         structureViewers.clear();
 
-        editorMode.values().forEach(structureId -> structureViewers.put(structureId, new HashSet<>()));
+        editorMode.values().forEach(structureId -> structureViewers.put(structureId, ConcurrentHashMap.newKeySet()));
 
         for (String structureId : plugin.getStructureConfig().getKeys(false)) {
             ConfigurationSection structureSection = plugin.getStructureConfig().getConfigurationSection(structureId);
@@ -68,7 +69,7 @@ public class StructureManager {
 
             Structure.getSerializer().deserialize(structureSection).ifPresent(structure -> {
                 structures.put(structureId, structure);
-                structureViewers.put(structureId, new HashSet<>());
+                structureViewers.put(structureId, ConcurrentHashMap.newKeySet());
 
                 loadShowTriggers(structure);
                 loadHideTriggers(structure);
@@ -168,7 +169,7 @@ public class StructureManager {
         Structure structure = new Structure(structureId);
 
         structures.put(structureId, structure);
-        structureViewers.put(structureId, new HashSet<>());
+        structureViewers.put(structureId, ConcurrentHashMap.newKeySet());
 
         return Optional.of(structure);
     }
